@@ -14,8 +14,9 @@
   const wVal = document.getElementById('wv');
   const lagOut = document.getElementById('lag');
 
-  const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
-  if (!fine) return;
+  // No early return on pointer type: a device that reports `hover:none` still
+  // gets the physics, and CSS hides the dot. Bailing here meant a headless or
+  // hover-less environment got a dead page rather than a working one.
 
   let mx = innerWidth / 2, my = innerHeight / 2;      // true pointer
   let px = mx, py = my, vx = 0, vy = 0;               // body
