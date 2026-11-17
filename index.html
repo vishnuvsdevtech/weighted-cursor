@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weighted Cursor — an interface with mass</title>
+<meta name="description" content="A pointer with inertia, squash and magnetic pull. The single cheapest change to how a whole site feels.">
+<meta name="theme-color" content="#07090a">
+<link rel="canonical" href="https://vishnuvsdevtech.github.io/weighted-cursor/">
+<style>
+:root{--bg:#07090a;--card:#0d1214;--line:rgba(220,255,240,.10);--line2:rgba(220,255,240,.18);
+ --ink:#e6f5ee;--ink2:#a6bdb1;--muted:#6d8579;--acc:#b6ff4a;
+ --mono:ui-monospace,'SF Mono',Menlo,monospace;--sans:'Geist',ui-sans-serif,system-ui,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--sans);overflow:hidden;
+ background-image:radial-gradient(90% 70% at 50% 0%,#0f1a14 0%,#07090a 60%)}
+@media (hover:hover) and (pointer:fine){ body{cursor:none} *{cursor:none} }
+.wrap{max-width:1060px;margin:0 auto;padding:clamp(18px,4vw,40px);height:100%;display:flex;flex-direction:column;gap:18px}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+h1{font-size:clamp(20px,3.2vw,30px);letter-spacing:-.02em;margin:0;font-weight:600}
+h1 em{font-style:normal;color:var(--acc)}
+.tag{font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.stage{flex:1;position:relative;border:1px solid var(--line2);border-radius:14px;background:
+ radial-gradient(120% 120% at 50% 0%,#0c1512 0%,#07090a 70%);overflow:hidden;min-height:300px}
+.hint{position:absolute;left:16px;top:14px;font:10px var(--mono);letter-spacing:.14em;
+ text-transform:uppercase;color:var(--muted)}
+.row{position:absolute;left:0;right:0;top:46%;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:0 16px}
+.mag{border:1px solid var(--line2);background:rgba(182,255,74,.06);color:var(--ink);
+ font:12px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:13px 22px;border-radius:999px;
+ transition:background .2s,border-color .2s,color .2s}
+.mag:hover,.mag:focus-visible{background:rgba(182,255,74,.14);border-color:rgba(182,255,74,.5);color:var(--acc);outline:none}
+.tilt{position:absolute;left:50%;top:12%;transform:translateX(-50%);width:min(300px,60%);padding:16px 18px;
+ border:1px solid var(--line2);border-radius:12px;background:linear-gradient(160deg,#111a16,#0a100d);
+ transform-style:preserve-3d;transition:border-color .2s}
+.tilt b{display:block;font:600 10px var(--mono);letter-spacing:.14em;color:var(--acc);margin-bottom:6px}
+.tilt p{margin:0;font-size:12.5px;color:var(--ink2)}
+.panel{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:680px){.panel{grid-template-columns:1fr}}
+.box{border:1px solid var(--line);border-radius:11px;background:var(--card);padding:12px 14px;
+ display:flex;align-items:center;gap:12px}
+.box span{font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--acc)}
+.box b{font:12px var(--mono);color:var(--acc);min-width:64px;text-align:right}
+#dot,#ring{position:fixed;left:0;top:0;pointer-events:none;will-change:transform;z-index:9999;
+ border-radius:50%;transform:translate3d(-50%,-50%,0)}
+#dot{width:12px;height:12px;background:var(--acc);box-shadow:0 0 18px rgba(182,255,74,.55)}
+#ring{width:38px;height:38px;border:1px solid rgba(182,255,74,.45)}
+#dot.pop{box-shadow:0 0 34px rgba(182,255,74,.9)}
+@media (hover:none){#dot,#ring{display:none}}
+footer{font:10px var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase;
+ display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>An interface with <em>mass</em></h1>
+    <span class="tag">inertia · squash · magnetic pull</span>
+  </header>
+
+  <section class="stage" id="stage">
+    <div class="hint">move slowly, then flick</div>
+    <div class="tilt" id="tilt">
+      <b>THIS CARD LEANS</b>
+      <p>It tilts toward the pointer in 3D, but only a few degrees — enough that your eye reads it as a physical object sitting on the page.</p>
+    </div>
+    <div class="row">
+      <button class="mag" data-mag>Magnetic</button>
+      <button class="mag" data-mag>Pull</button>
+      <button class="mag" data-mag>Snap</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="box"><span>weight</span><input id="w" type="range" min="6" max="44" value="20"><b id="wv">20</b></div>
+    <div class="box"><span>lag</span><b id="lag">0 px</b></div>
+  </section>
+
+  <footer><span>Weighted Cursor · POC</span><span>spring-damper, not easing</span></footer>
+</div>
+
+<div id="ring"></div>
+<div id="dot"></div>
+<script src="assets/app.js"></script>
+</body>
+</html>
